@@ -122,6 +122,6 @@ app.post('/auth/login', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`API Gateway escuchando en http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`API Gateway escuchando en http://0.0.0.0:${port}`);
 });
