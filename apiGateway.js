@@ -36,6 +36,35 @@ app.get('/api/urgencias/documentos', authenticateMiddleware, async (req, res) =>
     }
 });
 
+app.post('/api/urgencias', authenticateMiddleware, async (req, res) => {
+    try {
+        // Importación dinámica de node-fetch
+        const fetch = await import('node-fetch');
+
+        const url = 'http://localhost:8080/api/urgencias';
+        
+        // Obtener datos del cuerpo de la solicitud
+        const { id, documento, estado } = req.body;
+
+        const response = await fetch.default(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, documento, estado }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Respuesta no exitosa del servicio de urgencias');
+        }
+
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        res.status(500).send('Error al comunicarse con el servicio de urgencias.');
+    }
+});
+
 // Ruta específica para el servicio de urgencias
 app.post('/historias/historia_clinica/', authenticateMiddleware, async (req, res) => {
     try {
