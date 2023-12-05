@@ -122,6 +122,30 @@ app.post('/auth/login', async (req, res) => {
     }
 });
 
+//ruta para registrar usuario
+app.post('/auth/register', async (req, res) => {
+    try {
+        const fetch = await import('node-fetch');
+        const url = 'http://localhost:8080/auth/register';
+        const { username, password, rol } = req.body;
+
+        const response = await fetch.default(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password, rol }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Respuesta no exitosa del servicio de registro');
+        }
+
+    } catch (error) {
+        res.status(500).send(`Error al comunicarse con el servicio de registro: ${error.message}`);
+    }
+});
+
 app.listen(port, '0.0.0.0', () => {
     console.log(`API Gateway escuchando en http://0.0.0.0:${port}`);
 });
